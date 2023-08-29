@@ -1,20 +1,41 @@
 import { useState } from "react";
 import { getLoteriaRand } from "utils/random";
 import { loteriaMap } from "utils/loteria";
+import Swal from "sweetalert2";
 
 function App() {
   const [randomCard, setRandomCard] = useState(`00`);
+  const [list, setList] = useState({});
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    // TODO: store the name and the card
-    const cartaLoteria = getLoteriaRand();
-    setRandomCard(cartaLoteria);
-    console.log(
-      "🚀 ~ file: App.js:10 ~ onSubmitHandler ~ e:",
-      e.target.name.value,
-      loteriaMap[cartaLoteria]
-    );
+    if (!list[e.target.name.value]) {
+      Swal.fire(
+        "Buen trabajo!",
+        "El invitado se a agregado correctamente!",
+        "success"
+      );
+      const card = getLoteriaRand();
+      setRandomCard(card);
+      setList({ ...list, [e.target.name.value]: loteriaMap[card] });
+      e.target.name.value = "";
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "El invitado ya esta registrado!",
+      });
+    }
+  };
+
+  const deleteHandler = (key) => {
+    const newList = Object.entries(list).reduce((newObj, current) => {
+      if (current[0] !== key) {
+        newObj[current[0]] = current[1];
+      }
+      return newObj;
+    }, {});
+    setList(newList);
   };
 
   return (
@@ -36,6 +57,36 @@ function App() {
         />
         <input className="SubmitButton" type="submit" value="Generar" />
       </form>
+      {Object.keys(list)?.length > 0 && (
+        <div className="TableContainer">
+          <h2 className="Subtitle">Lista de Invitados</h2>
+          <table className="Table" border="1">
+            <thead className="TableHead">
+              <tr className="TableRow">
+                <th className="TableBoldData">Nombre</th>
+                <th className="TableBoldData">Carta</th>
+                <th className="TableBoldData">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody className="TableBody">
+              {Object.entries(list).map((val, i) => (
+                <tr key={`id-${i}`} className="TableRow">
+                  <td className="TableDate">{val[0]}</td>
+                  <td className="TableDate">{val[1]}</td>
+                  <td className="TableDate">
+                    <button
+                      className="DeleteButton"
+                      onClick={() => deleteHandler(val[0])}
+                    >
+                      x
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

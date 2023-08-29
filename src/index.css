@@ -17,13 +17,13 @@ code {
   text-align: center;
 
   .ImageContainer {
-    width: 100%;
     height: 300px;
     overflow: hidden;
+    width: 100%;
 
     .fullWidth {
-      width: auto;
       height: 100%;
+      width: auto;
     }
   }
 
@@ -33,24 +33,76 @@ code {
     padding: 20px;
 
     .InputField {
-      width: 100%;
-      margin: 10px auto;
-      padding: 10px 0px;
-      display: block;
-      border: 0px;
       background-color: rgb(239, 239, 239);
+      border-radius: 5px;
+      border: 0px;
+      display: block;
+      margin: 10px auto 20px auto;
+      padding: 10px 0px;
       text-align: center;
+      width: 100%;
     }
     .InputField::placeholder {
       color: #000;
     }
 
     .SubmitButton {
+      border: 0px;
       display: block;
-      width: 100%;
       margin: 10px auto;
       padding: 10px 0px;
-      border: 0px;
+      width: 100%;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #000;
+        color: rgb(239, 239, 239);
+      }
+    }
+  }
+
+  .TableContainer {
+    width: calc(100% - 45px);
+    margin:  10px auto 50px auto;
+
+    .Subtitle {
+      text-align: left;
+    }
+
+    .Table {
+      width: 100%;
+
+      .TableHead {
+        .TableRow {
+          .TableBoldData {
+            text-align: center;
+          }
+        }
+      }
+
+      .TableBody {
+        .TableRow {
+          .TableData {
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+
+  .DeleteButton {
+    background: red;
+    border-radius: 50%;
+    border: 0px;
+    color: #fff;
+    font-weight: bold;
+    margin: 5px;
+    padding: 3px 7px;
+    cursor: pointer;
+
+    &:hover {
+      background: #fff;
+      color: red;
     }
   }
 }
