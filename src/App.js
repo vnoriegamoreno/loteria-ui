@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { getLoteriaRand } from "utils/random";
 
 function App() {
+  const [name, setName] = useState("");
+  const [randomCard, setRandomCard] = useState(`00`);
+
+  const onSubmitHandler = () => {};
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className="Title">Loteria</h1>
+      <div className="ImageContainer">
+        <img className="fullWidth" src={`/images/Cartas-${randomCard}.png`} />
+      </div>
+      <form className="Form">
+        <input
+          className="InputField"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nombre participante"
+        />
+        <input className="SubmitButton" type="submit" value="Generar" />
+      </form>
     </div>
   );
 }
