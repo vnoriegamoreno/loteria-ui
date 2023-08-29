@@ -8,21 +8,37 @@ function App() {
   const [randomCard, setRandomCard] = useState(`00`);
   const [countdown, setCountdown] = useState(4);
   const [loadCard, setLoadCard] = useState(false);
+  const [key, setKey] = useState("");
 
   useEffect(() => {
-    if (countdown < 4 && loadCard) {
+    if (countdown > 0 && loadCard) {
       setTimeout(() => {
-        setCountdown(countdown + 1);
+        setCountdown(countdown - 1);
       }, 1000);
+    } else if (countdown === 0 && loadCard) {
+      const cardNumber = getLoteriaRand();
+      setRandomCard(cardNumber);
+      setList({ ...list, [key]: loteriaMap[cardNumber] });
+      setKey("");
     } else {
-      setCountdown(0);
       setLoadCard(false);
     }
   }, [countdown, loadCard]);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    setLoadCard(true);
+    if (!list[e.target.name.value]) {
+      setLoadCard(true);
+      setCountdown(4);
+      setKey(e.target.name.value);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "El invitado ya esta registrado!",
+      });
+    }
+
     // if (!list[e.target.name.value]) {
     //   Swal.fire(
     //     "Buen trabajo!",
@@ -34,11 +50,11 @@ function App() {
     //   setList({ ...list, [e.target.name.value]: loteriaMap[card] });
     //   e.target.name.value = "";
     // } else {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Oops...",
-    //     text: "El invitado ya esta registrado!",
-    //   });
+    // Swal.fire({
+    //   icon: "error",
+    //   title: "Oops...",
+    //   text: "El invitado ya esta registrado!",
+    // });
     // }
   };
 
@@ -63,15 +79,19 @@ function App() {
   //   return clearTimeout(countdownID);
   // }, [countdown]);
 
+  console.log(countdown);
+
   return (
     <div className="App">
       <h1 className="Title">Loteria</h1>
       <div className="ImageContainer">
-        <p className="CountDown">
-          <span className="InnerCountDown">
-            {countdown === 0 ? "" : countdown}
-          </span>
-        </p>
+        {loadCard && countdown !== 0 && (
+          <p className="CountDown">
+            <span className="InnerCountDown">
+              {countdown !== 0 && countdown !== 4 ? countdown : ""}
+            </span>
+          </p>
+        )}
         {countdown === 0 && (
           <img
             className="fullWidth"
