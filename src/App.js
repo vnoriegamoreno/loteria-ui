@@ -27,10 +27,10 @@ function App() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if (!list[e.target.name.value]) {
+    if (!list[key]) {
       setLoadCard(true);
       setCountdown(4);
-      setKey(e.target.name.value);
+      setKey(key);
     } else {
       Swal.fire({
         icon: "error",
@@ -72,9 +72,11 @@ function App() {
       <form className="Form" onSubmit={onSubmitHandler}>
         <input
           className="InputField"
-          placeholder="Nombre participante"
           name="name"
+          onChange={(e) => setKey(e.target.value)}
+          placeholder="Nombre participante"
           type="text"
+          value={key}
         />
         <input className="SubmitButton" type="submit" value="Generar" />
       </form>
