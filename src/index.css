@@ -45,6 +45,10 @@ code {
     .InputField::placeholder {
       color: #000;
     }
+    .InputField:focus {
+      outline: none;
+      box-shadow: 3px 3px 7px silver;
+    }
 
     .SubmitButton {
       border: 0px;
@@ -64,10 +68,6 @@ code {
   .TableContainer {
     width: calc(100% - 45px);
     margin:  10px auto 50px auto;
-
-    .Subtitle {
-      text-align: left;
-    }
 
     .Table {
       width: 100%;
