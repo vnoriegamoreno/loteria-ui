@@ -27,10 +27,16 @@ function App() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if (!list[key]) {
+    if (!list[key] && key.trim() !== "") {
       setLoadCard(true);
       setCountdown(4);
       setKey(key);
+    } else if (key.trim() === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Por favor ingrese el nombre del invitado!",
+      });
     } else {
       Swal.fire({
         icon: "error",
