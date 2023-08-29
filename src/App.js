@@ -38,24 +38,6 @@ function App() {
         text: "El invitado ya esta registrado!",
       });
     }
-
-    // if (!list[e.target.name.value]) {
-    //   Swal.fire(
-    //     "Buen trabajo!",
-    //     "El invitado se a agregado correctamente!",
-    //     "success"
-    //   );
-    //   const card = getLoteriaRand();
-    //   setRandomCard(card);
-    //   setList({ ...list, [e.target.name.value]: loteriaMap[card] });
-    //   e.target.name.value = "";
-    // } else {
-    // Swal.fire({
-    //   icon: "error",
-    //   title: "Oops...",
-    //   text: "El invitado ya esta registrado!",
-    // });
-    // }
   };
 
   const deleteHandler = (key) => {
@@ -67,19 +49,6 @@ function App() {
     }, {});
     setList(newList);
   };
-
-  // useEffect(() => {
-  //   console.log("useEffect");
-  //   const countdownID = setTimeout(() => {
-  //     while (countdown <= 3) {
-  //       setCountdown(countdown + 1);
-  //     }
-  //     console.log("🚀 ~ file: App.js:35 ~ countdownID ~ countdown:", countdown);
-  //   }, 1000);
-  //   return clearTimeout(countdownID);
-  // }, [countdown]);
-
-  console.log(countdown);
 
   return (
     <div className="App">
