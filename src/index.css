@@ -21,6 +21,15 @@ code {
     overflow: hidden;
     width: 100%;
 
+    .CountDown {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      .InnerCountDown {
+        font-size: 4rem;
+      }
+    }
     .fullWidth {
       height: 100%;
       width: auto;
@@ -44,10 +53,6 @@ code {
     }
     .InputField::placeholder {
       color: #000;
-    }
-    .InputField:focus {
-      outline: none;
-      box-shadow: 3px 3px 7px silver;
     }
 
     .SubmitButton {

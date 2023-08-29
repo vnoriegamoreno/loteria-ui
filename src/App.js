@@ -1,31 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getLoteriaRand } from "utils/random";
 import { loteriaMap } from "utils/loteria";
 import Swal from "sweetalert2";
 
 function App() {
-  const [randomCard, setRandomCard] = useState(`00`);
   const [list, setList] = useState({});
+  const [randomCard, setRandomCard] = useState(`00`);
+  const [countdown, setCountdown] = useState(4);
+  const [loadCard, setLoadCard] = useState(false);
+
+  useEffect(() => {
+    if (countdown < 4 && loadCard) {
+      setTimeout(() => {
+        setCountdown(countdown + 1);
+      }, 1000);
+    } else {
+      setCountdown(0);
+      setLoadCard(false);
+    }
+  }, [countdown, loadCard]);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if (!list[e.target.name.value]) {
-      Swal.fire(
-        "Buen trabajo!",
-        "El invitado se a agregado correctamente!",
-        "success"
-      );
-      const card = getLoteriaRand();
-      setRandomCard(card);
-      setList({ ...list, [e.target.name.value]: loteriaMap[card] });
-      e.target.name.value = "";
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "El invitado ya esta registrado!",
-      });
-    }
+    setLoadCard(true);
+    // if (!list[e.target.name.value]) {
+    //   Swal.fire(
+    //     "Buen trabajo!",
+    //     "El invitado se a agregado correctamente!",
+    //     "success"
+    //   );
+    //   const card = getLoteriaRand();
+    //   setRandomCard(card);
+    //   setList({ ...list, [e.target.name.value]: loteriaMap[card] });
+    //   e.target.name.value = "";
+    // } else {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     text: "El invitado ya esta registrado!",
+    //   });
+    // }
   };
 
   const deleteHandler = (key) => {
@@ -38,15 +52,33 @@ function App() {
     setList(newList);
   };
 
+  // useEffect(() => {
+  //   console.log("useEffect");
+  //   const countdownID = setTimeout(() => {
+  //     while (countdown <= 3) {
+  //       setCountdown(countdown + 1);
+  //     }
+  //     console.log("🚀 ~ file: App.js:35 ~ countdownID ~ countdown:", countdown);
+  //   }, 1000);
+  //   return clearTimeout(countdownID);
+  // }, [countdown]);
+
   return (
     <div className="App">
       <h1 className="Title">Loteria</h1>
       <div className="ImageContainer">
-        <img
-          className="fullWidth"
-          src={`/images/Cartas-${randomCard}.png`}
-          alt="Carta de loteria"
-        />
+        <p className="CountDown">
+          <span className="InnerCountDown">
+            {countdown === 0 ? "" : countdown}
+          </span>
+        </p>
+        {countdown === 0 && (
+          <img
+            className="fullWidth"
+            src={`/images/Cartas-${randomCard}.png`}
+            alt="Carta de loteria"
+          />
+        )}
       </div>
       <form className="Form" onSubmit={onSubmitHandler}>
         <input
