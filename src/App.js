@@ -16,14 +16,17 @@ function App() {
       .then((response) => {
         if (response.success && response.data.length) {
           const storedList = response.data.reduce((l, c) => {
-            l[c.name] = c.card;
+            l[c.name] = `${c.card}-${c.id}`;
             return l;
           }, {});
           setList(storedList);
         }
       })
       .catch((err) =>
-        console.log("🚀 ~ file: App.js:18 ~ useEffect ~ err:", err)
+        console.log(
+          "🚀 ~ An error has been ocurred trying to retrieve a loteria list ERR: ",
+          err
+        )
       );
   }, []);
 
@@ -36,6 +39,22 @@ function App() {
       const cardNumber = getLoteriaRand();
       setRandomCard(cardNumber);
       setList({ ...list, [key]: loteriaMap[cardNumber] });
+      fetch("http://localhost:8080/api/loteria", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: key, card: loteriaMap[cardNumber] }),
+      })
+        .then((data) =>
+          console.log("🚀 ~ User has been assigned correctly to loteria", data)
+        )
+        .catch((err) =>
+          console.log(
+            "🚀 ~ An error has been ocurred trying to add a new user to loteria list ERR: ",
+            err
+          )
+        );
       setKey("");
     } else {
       setLoadCard(false);
@@ -63,7 +82,8 @@ function App() {
     }
   };
 
-  const deleteHandler = (key) => {
+  const deleteHandler = (key, id) => {
+    console.log("🚀 ~ file: App.js:91 ~ deleteHandler ~ id:", id);
     const newList = Object.entries(list).reduce((newObj, current) => {
       if (current[0] !== key) {
         newObj[current[0]] = current[1];
@@ -71,6 +91,11 @@ function App() {
       return newObj;
     }, {});
     setList(newList);
+    fetch(`http://localhost:8080/api/loteria/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => console.log("🚀 ~ DELTE:", res))
+      .catch((err) => console.log("🚀 ~ DELTE ERR:", err));
   };
 
   return (
@@ -118,11 +143,13 @@ function App() {
               {Object.entries(list).map((val, i) => (
                 <tr key={`id-${i}`} className="TableRow">
                   <td className="TableDate">{val[0]}</td>
-                  <td className="TableDate">{val[1]}</td>
+                  <td className="TableDate">{val[1].split("-")[0]}</td>
                   <td className="TableDate">
                     <button
                       className="DeleteButton"
-                      onClick={() => deleteHandler(val[0])}
+                      onClick={() =>
+                        deleteHandler(val[0], val[1].split("-")[1])
+                      }
                     >
                       x
                     </button>
