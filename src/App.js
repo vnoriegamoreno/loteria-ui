@@ -11,6 +11,23 @@ function App() {
   const [key, setKey] = useState("");
 
   useEffect(() => {
+    fetch("http://localhost:8080/api/loteria")
+      .then((r) => r.json())
+      .then((response) => {
+        if (response.success && response.data.length) {
+          const storedList = response.data.reduce((l, c) => {
+            l[c.name] = c.card;
+            return l;
+          }, {});
+          setList(storedList);
+        }
+      })
+      .catch((err) =>
+        console.log("🚀 ~ file: App.js:18 ~ useEffect ~ err:", err)
+      );
+  }, []);
+
+  useEffect(() => {
     if (countdown > 0 && loadCard) {
       setTimeout(() => {
         setCountdown(countdown - 1);
