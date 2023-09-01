@@ -3,6 +3,9 @@ import { getLoteriaRand } from "utils/random";
 import { loteriaMap } from "utils/loteria";
 import Swal from "sweetalert2";
 
+const API_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:8080/api/loteria";
+
 function App() {
   const [list, setList] = useState({});
   const [randomCard, setRandomCard] = useState(`00`);
@@ -11,7 +14,7 @@ function App() {
   const [key, setKey] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/loteria")
+    fetch(API_URL)
       .then((r) => r.json())
       .then((response) => {
         if (response.success && response.data.length) {
@@ -39,7 +42,7 @@ function App() {
       const cardNumber = getLoteriaRand();
       setRandomCard(cardNumber);
       setList({ ...list, [key]: loteriaMap[cardNumber] });
-      fetch("http://localhost:8080/api/loteria", {
+      fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +94,7 @@ function App() {
       return newObj;
     }, {});
     setList(newList);
-    fetch(`http://localhost:8080/api/loteria/${id}`, {
+    fetch(`${API_URL}/${id}`, {
       method: "DELETE",
     })
       .then((res) => console.log("🚀 ~ DELTE:", res))
