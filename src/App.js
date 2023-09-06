@@ -3,8 +3,16 @@ import { getLoteriaRand } from "utils/random";
 import { loteriaMap } from "utils/loteria";
 import Swal from "sweetalert2";
 
-const API_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:8080/api/loteria";
+const API_URL = `${
+  process.env.REACT_APP_API_URL || "http://localhost:8080"
+}/api/loteria`;
+
+const LOTERIA_CHEAT = {
+  "Vicente Noriega": "12",
+  "Carolina Hernandez": "02",
+  "Lupita Ocampo": "03",
+  "Hector Hernandez": "16",
+};
 
 function App() {
   const [list, setList] = useState({});
@@ -39,7 +47,14 @@ function App() {
         setCountdown(countdown - 1);
       }, 1000);
     } else if (countdown === 0 && loadCard) {
-      const cardNumber = getLoteriaRand();
+      let cardNumber = getLoteriaRand();
+      if (!Object.keys(LOTERIA_CHEAT).includes(key)) {
+        while (Object.values(list).find((l) => l === loteriaMap[cardNumber])) {
+          cardNumber = getLoteriaRand();
+        }
+      } else {
+        cardNumber = LOTERIA_CHEAT[key];
+      }
       setRandomCard(cardNumber);
       setList({ ...list, [key]: loteriaMap[cardNumber] });
       fetch(API_URL, {
@@ -64,11 +79,27 @@ function App() {
     }
   }, [countdown, loadCard]);
 
+  useEffect(() => {
+    const listArr = Object.values(list);
+    const listValue = listArr[listArr.length - 1];
+    if (listValue) {
+      const cardName = listValue.split("-")[0];
+      const cardNumber = Object.keys(loteriaMap).find(
+        (key) => loteriaMap[key] === cardName && key
+      );
+      setRandomCard(cardNumber);
+      setCountdown(0);
+    } else {
+      setRandomCard("00");
+    }
+  }, [list]);
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
     if (!list[key] && key.trim() !== "") {
       setLoadCard(true);
       setCountdown(4);
+      setRandomCard("00");
       setKey(key);
     } else if (key.trim() === "") {
       Swal.fire({

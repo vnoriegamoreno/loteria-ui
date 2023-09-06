@@ -50,9 +50,15 @@ code {
       padding: 10px 0px;
       text-align: center;
       width: 100%;
+      &::focus {
+        outline: none;
+      }
     }
     .InputField::placeholder {
       color: #000;
+    }
+    .InputField::focus {
+      outline: none;
     }
 
     .SubmitButton {
